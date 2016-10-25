@@ -236,6 +236,7 @@ int main(int argc, char *argv[]) {
 		strcat(msgToSend_entire, server);
 		strcat(msgToSend_entire, "\n");
 		strcat(msgToSend_entire, httpNumResponse);
+				strcat(msgToSend_entire, "\n");
 		strcat(msgToSend_entire, msgToSend_body);
 		strcat(msgToSend_entire, "\n");
 		

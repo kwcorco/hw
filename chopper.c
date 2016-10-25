@@ -112,6 +112,13 @@ int main(int argc, char *argv[]) {
 	numBytes = recv(sock, received, 10000000, 0);
 		attempts++;
 	char *token = strtok(received, " ");
+//	char *token2 = strtok(received, " ");
+//	while (strcmp(token2, "Server: Group8/1.0") != 0){
+//		token2 = strtok(NULL, "\n");
+	//}
+
+	//token2 = strtok(NULL, " ");
+
 	while (strcmp(token, "Local Buffer:") != 0){
 		token = strtok(NULL, "\n");
 	}
@@ -139,7 +146,7 @@ int main(int argc, char *argv[]) {
 	//received[10000] = '\0';
 	end = clock();
 	double time_spent = ((double)(end-begin)) / CLOCKS_PER_SEC;
-	printf(" %d %.6f %s %s\n", attempts, time_spent, msgArg, token);
+	printf(" %d %.6f %s  %s\n", attempts, time_spent, msgArg, token);
 
 
 
