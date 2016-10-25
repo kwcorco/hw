@@ -129,7 +129,7 @@ int main(int argc, char *argv[]) {
 	
 	end = clock();
 	double time_spent = ((double)(end-begin)) / CLOCKS_PER_SEC;
-	printf(" %d %.6f %s %s %s\n", attempts, time_spent, msgArg, token2, token);
+	printf("%d	%.6f	%s	%s	%s\n", attempts, time_spent, msgArg, token2, token);
 
 
 

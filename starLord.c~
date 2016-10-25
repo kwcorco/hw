@@ -138,16 +138,25 @@ int main(int argc, char *argv[]) {
 			allowHeaderNeeded = true;
 			sprintf(httpNumResponse, "HTTP 405 ERROR; ONLY 'GET' METHOD ALLOWED");
 		}
-		else {
+			else {
 			addMode = false;
 			viewMode = false;
 			
 			token = strtok(NULL, " ");
 			if (strstr(token, "/add?") != NULL) {
 				addMode = true;
-				msgData = malloc(strlen(token) - strlen("/add?"));
+				msgData = malloc(sizeof(char)*100);
 				char *temp = strstr(token, "/add?");
 				strcpy(msgData, temp+5);
+
+				token = strtok(NULL, " ");
+
+				while(strstr(token, "HTTP") == NULL) {
+					strcat(msgData, " ");
+					strcat(msgData, token);
+					token = strtok(NULL, " ");
+				}
+				
 			}
 			else if (strstr(token, "/view?") != NULL)	{
 				viewMode = true;
@@ -157,17 +166,22 @@ int main(int argc, char *argv[]) {
 			else  {
 				sprintf(httpNumResponse, "HTTP 404 ERROR; ACTION NOT FOUND");
 			}
+			char *tempTok = malloc(strlen(token));
+			strcpy(tempTok, token);
+			char *split = "\n";
+			char *split2 = " ";
+			char *token_split_1 = strtok(tempTok, split);
+			char *token_split_2 = strtok(NULL, split);
 
-			token = strtok(NULL, "\n");
-			if (strcmp(token, "HTTP/1.1") != 0)
+			if (strcmp(token_split_1, "HTTP/1.1") != 0)
 				sprintf(httpNumResponse, "HTTP 400 ERROR; BAD REQUEST");
 
-			token = strtok(NULL, " ");
-			if (strcmp(token, "Host:") != 0)
+			//token = strtok(NULL, " ");
+			if (strcmp(token_split_2, "Host:") != 0)
 				sprintf(httpNumResponse, "HTTP 400 ERROR; BAD REQUEST");
 			else {
 				if (addMode) {
-					token = strtok(NULL, " ");
+					token +=15;
 					hostName = malloc(strlen(token));
 					sprintf(hostName, "%s", token);
 					dataToAdd=malloc(strlen(hostName)+strlen(msgData)+2);

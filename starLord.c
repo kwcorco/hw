@@ -255,7 +255,7 @@ int main(int argc, char *argv[]) {
 		strcat(msgToSend_entire, "\n");
 		
 
-		printf("%s\n", msgToSend_entire);
+		
 
 
 		// Send inverted message back to client

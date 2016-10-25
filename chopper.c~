@@ -120,34 +120,13 @@ int main(int argc, char *argv[]) {
 
 	strcpy(token2, token);
 
-	//token2 = strtok(NULL, "\n");
-	//token2 = strtok(NULL, " ");
-
+	
 	while (strcmp(token, "Local Buffer:") != 0){
 		token = strtok(NULL, "\n");
 	}
-	//token+=13;
+	
 	token = strtok(NULL, ":");	
-	/*while (!recv_success) {
-		numBytes = recv(sock, received, BUFSIZE - 1, 0);
-		attempts++;
-		if (numBytes == messageLen) {
-			end = clock();
-			recv_success = true;
-		}
-		else if (numBytes != messageLen) {
-			printf("recv() error: received unexpected number of bytes; \n");
-			printf("attempting to receive again...\n");
-		}
-		else if (!SockAddrsEqual(servAddr->ai_addr, (struct sockaddr*)&fromAddr))
-			printf("recv() error: received a packet from unknown source\n");
-		else
-			printf("recv() failed; attempting to receive again...\n");
-			
-	}*/
-  
-	// Null-terminate received message, end clock, and print communication stats
-	//received[10000] = '\0';
+	
 	end = clock();
 	double time_spent = ((double)(end-begin)) / CLOCKS_PER_SEC;
 	printf(" %d %.6f %s %s %s\n", attempts, time_spent, msgArg, token2, token);
