@@ -1,3 +1,5 @@
+// see readme for information about ahsoka
+
 #include "starLord.h"
 #define NUM_MSGS 64
 
@@ -29,6 +31,12 @@ int main(int argc, char *argv[]) {
 	int i;
 	for (i=0; i<NUM_MSGS; i++) 
 		msgsArgs[i] = (char *)malloc(80 * sizeof(char));
+
+	// allocate memory
+	msgsSent = malloc(10000);
+	memset(msgsSent, 0, strlen(msgsSent));
+	msgsReceived = malloc(10000);
+	memset(msgsReceived, 0, strlen(msgsReceived));
 
 	// Parse command line arguments with flags and initialize variables
 	int j=1;
@@ -105,20 +113,6 @@ int main(int argc, char *argv[]) {
 		exit(1);
 	}
 
-	// Create a reliable stream socket using TCP
-	int sock = socket(servAddr->ai_family, servAddr->ai_socktype,
-							servAddr->ai_protocol);
-	if (sock < 0) {
-		perror("socket() failed");
-		exit(1);
-	}
-/*
-	// Establish the connection to the server
-	if (connect(sock, servAddr->ai_addr, servAddr->ai_addrlen) < 0) {
-		perror("connect() failed");
-		exit(1);
-	}
-*/
 	// Declare new variables for sending/receiving and clock time
 	_Bool send_success = false, recv_success = false;
 	int attempts = 0;
@@ -126,8 +120,15 @@ int main(int argc, char *argv[]) {
 	begin = clock();
 
 	
-	int k;
+	int k, sock;
 	for (k=0; k<msgsParsed; k++) {
+		attempts++;
+		strcat(msgsSent, hostHeader);
+		strcat(msgsSent, " ");
+		strcat(msgsSent, msgsArgs[k]);
+		strcat(msgsSent, "\n");		
+		sock = socket(servAddr->ai_family, servAddr->ai_socktype,
+							 servAddr->ai_protocol);
 		connect(sock, servAddr->ai_addr, servAddr->ai_addrlen);
 		msgsToSend[k] = malloc(strlen(msgsArgs[k])
 							+strlen("GET /add? HTTP/1.1\nHost: ")
@@ -141,45 +142,33 @@ int main(int argc, char *argv[]) {
 		// Send the string to the server
 		messageLen = strlen(msgsToSend[k]);
 		numBytes = send(sock, msgsToSend[k], messageLen, 0);
-		printf("msg sent: %s\n", msgsToSend[k]);	
+		if (k < msgsParsed-1) close(sock);
 	}
 
-/*
+
 	// Receive final re-inverted string back from caseInverter
-	char final[MAXSTRINGLENGTH + 1];
-	bzero(final, sizeof(final));
-	recv_success = false;
-	while (!recv_success) {
-		numBytes = recv(sock, final, BUFSIZE - 1, 0);
-		if (numBytes == invertedLen) 
-			recv_success = true;
-		else if (numBytes != invertedLen) {
-			printf("recv() error: received unexpected number of bytes;\n");
-			printf("attempting to receive again...\n");
-		}
-		else if (!SockAddrsEqual(servAddr->ai_addr, (struct sockaddr*)&fromAddr))
-			printf("recv() error: received a packet from unknown source\n");
-		else
-			printf("recvfrom() failed; attempting to receive again...\n");
+	bzero(msgsReceived, sizeof(msgsReceived));
+	numBytes = recv(sock, msgsReceived, 10000, 0);
+	char *token = strtok(msgsReceived, " ");
+	while (strcmp(token, "Local Buffer:") != 0) {
+		token = strtok(NULL, "\n");
 	}
 
-	// Null-terminate inverted and final message
-	inverted[messageLen] = '\0';
-	final[messageLen] = '\0';
+	token = strtok(NULL, ":");
+		
 
 	// Verify that initial msg and final doubly-inverted msg are identical
-	_Bool verified = !strcmp(message, final);
-
+	_Bool verified = !strcmp(msgsSent, token);
+	
 	// End clock and print communication stats
 	end = clock();
 	double time_spent = ((double)(end - begin)) / CLOCKS_PER_SEC;
-	printf(" %d	%.6f	%s	%s	%s\n", attempts, time_spent, message, inverted,
-			 verified ? "Verified" : "Not Verified");
+	printf(" %d\t%.6f\t%s\t%s\n", attempts, time_spent, msgsSent, verified ? "Verified" : "Invalid");
 	
 	// Close socket and free addrinfo allocated in getaddrinfo()
 	close(sock);
 	freeaddrinfo(servAddr);
-*/
+
 	return 0;
 }
 

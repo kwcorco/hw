@@ -162,7 +162,11 @@ int main(int argc, char *argv[]) {
 				viewMode = true;
 				msgData = malloc(strlen("\0"));
 				sprintf(msgData, " ");
-			}	
+				token = strtok(NULL, " ");
+				while (strstr(token, "HTTP") == NULL) {
+					token = strtok(NULL, " ");
+				}
+			}
 			else  {
 				sprintf(httpNumResponse, "HTTP 404 ERROR; ACTION NOT FOUND");
 			}
@@ -212,10 +216,12 @@ int main(int argc, char *argv[]) {
 										dt.tm_hour, dt.tm_min, dt.tm_sec);
 
 			// fill body of message to be sent with appropriate content
-			if (viewMode) {
-				msgToSend_body = malloc(strlen("Local Buffer:\n\n")+strlen(buffer));
+			if (viewMode == true) {
+				msgToSend_body = malloc(10000);
 				memset(msgToSend_body, 0, strlen(msgToSend_body));
-				sprintf(msgToSend_body, "Local Buffer:\n%s\n", buffer);
+				sprintf(msgToSend_body, "Local Buffer:\n");
+				strcat(msgToSend_body, buffer);
+				strcat(msgToSend_body, "\n");
 			}
 			else {
 				msgToSend_body = malloc(strlen("Msg Added:\n\nLocal Buffer:\n\n") 
@@ -223,7 +229,7 @@ int main(int argc, char *argv[]) {
 				sprintf(msgToSend_body, "Msg Added:\n%s\n", dataToAdd);
 				strcat(msgToSend_body, "Local Buffer:\n");
 				strcat(msgToSend_body, buffer);
-				strcat(msgToSend_body, "\n");
+				//strcat(msgToSend_body, "\n");
 			}
 
 			// fill remaining header strings with appropriate content
@@ -252,7 +258,7 @@ int main(int argc, char *argv[]) {
 		strcat(msgToSend_entire, httpNumResponse);
 				strcat(msgToSend_entire, "\n");
 		strcat(msgToSend_entire, msgToSend_body);
-		strcat(msgToSend_entire, "\n");
+//		strcat(msgToSend_entire, "\n");
 		
 
 		
