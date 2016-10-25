@@ -112,12 +112,14 @@ int main(int argc, char *argv[]) {
 	numBytes = recv(sock, received, 10000000, 0);
 		attempts++;
 	char *token = strtok(received, " ");
-	char *token2 = strtok(received, " ");
-	while (strcmp(token2, "Server: Group8/1.0") != 0){
-		token2 = strtok(NULL, "\n");
+	char *token2 = malloc(sizeof(char)*100);
+	
+	while (strstr(token, "HTTP") == NULL){
+		token = strtok(NULL, "\n");
 	}
 
-	token2 = strtok(NULL, " ");
+	//token2 = strtok(NULL, "\n");
+	//token2 = strtok(NULL, " ");
 
 	while (strcmp(token, "Local Buffer:") != 0){
 		token = strtok(NULL, "\n");
