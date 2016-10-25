@@ -116,7 +116,7 @@ int main(int argc, char *argv[]) {
 		token = strtok(NULL, "\n");
 	}
 	//token+=13;
-	token = strtok(NULL, ":");	
+	token = strtok(null, ":");	
 	/*while (!recv_success) {
 		numBytes = recv(sock, received, BUFSIZE - 1, 0);
 		attempts++;
