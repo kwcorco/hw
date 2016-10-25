@@ -3,6 +3,8 @@ CPSC 3600
 Homework #3
 24 October 2016
 
+!!Programs will not run with spaces in the host header or message. We are
+aware of this problem and did not have the time to correct it!!
 
 All 3 programs were based on the TCP Server/Client files from Project 2.
 
