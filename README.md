@@ -1,2 +1,0 @@
-# CPSC3600-HW3
-HTML server
