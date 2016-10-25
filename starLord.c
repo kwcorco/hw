@@ -224,7 +224,8 @@ int main(int argc, char *argv[]) {
 		msgToSend_entire = malloc(strlen("Allow: GET") + strlen(connection) +
 											strlen(date) + strlen(last_mod) +
 											strlen(content_len) + strlen(content_type) +
-											strlen(server) + strlen(msgToSend_body) );
+											strlen(server) + strlen(msgToSend_body) + strlen(httpNumResponse) );
+		
 		
 		sprintf(msgToSend_entire,"%s", connection);
 		if (allowHeaderNeeded) strcat(msgToSend_entire, "Allow: GET");
@@ -234,6 +235,8 @@ int main(int argc, char *argv[]) {
 		strcat(msgToSend_entire, content_type);
 		strcat(msgToSend_entire, server);
 		strcat(msgToSend_entire, "\n");
+		strcat(msgToSend_entire, httpNumResponse);
+				strcat(msgToSend_entire, "\n");
 		strcat(msgToSend_entire, msgToSend_body);
 		strcat(msgToSend_entire, "\n");
 		
